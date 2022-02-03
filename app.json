@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Primecard",
+    "slug": "Primecard-Mobile-App",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/Primecard-Logo.png",
+    "platforms":["ios","android"],
+    "splash": {
+      "image": "./assets/images/Primecard-Logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.primecard.net",
+      "buildNumber" :"1.0.0",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.primecard.net",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/Primecard-Logo.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    }
+  }
+}

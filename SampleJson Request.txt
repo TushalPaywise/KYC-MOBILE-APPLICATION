@@ -1,0 +1,109 @@
+http://localhost:8080/VirtualMerchant/faces/index.xhtml?kyc=true&json=true
+
+https://test.upaywise.com/kyc/card_login.xhtml?userId=1354D2541
+
+Register User: 
+http://localhost:8080/api/rest/register
+
+{"email":"tushal@softconnectltd.com","mobileNumber":"+23058129036","idNumber":"J2108940802615","password":"186cf774c97b60a1c106ef718d10970a6a06e06bef89553d9ae65d938a886eae"}
+
+http://localhost:8080/api/rest/passwordReset
+{"email":"tushal@softconnectltd.com","mobileNumber":"+23058129036","idNumber":"J2108940802615","password":"superadmin"}
+
+http://localhost:8080/api/rest/login
+{"email":"tushal@softconnectltd.com","password":"superadmin"}
+
+
+
+http://localhost:8080/api/rest/authenticate
+------------------------------Select Authenticate Json Sample
+{"email":"tushal@softconnectltd.com","token":"F!mf6XZjmaSCRL#ddz8!ZtTUVQzw24kpkiHmLVZZacOHUUE#AP","otp":"036329","userId":"55223366558466985"}
+
+{"token":null,"status":"SUCCESS","expireIn":0,"moreDetails":"TOKENVALID","email":"tushal@softconnectltd.com","userId":null,"firstName":null,"lastName":null,"accountStatus":null,"rSInfo":{"infoList":null,"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":{"IDNumber":"1354D254","Mobile":"57431244","Email":"jethrom@gmail.com","First_Name":"Jethro","Cards":{"Card":{"Record":null,"CARD_NO":null,"STATUS":null,"CardNum":"455888XXXXXX1134","Expiry":"31 Aug 2023","CardType":"KYC2","CardStatusCode":"1","CardStatusDescp":"Active CARD"}}},"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null},"cardNumber":null}
+
+
+
+-------------------------------Email Support
+
+
+
+{"email":"tushal@softconnectltd.com","token":"#ujOyQhdLBEZhsKYCp25cyJwsTCBK!a0gFZMRZ0z4gCGVSmS8S","api":"EMAIL_SUPPORT","emailUserName":"Tushal","mobileNumber":"+23058129036","emailMessage" : "I need to reset my password"}
+
+
+
+
+
+
+
+
+
+http://localhost:8080/api/rest/mobileservice
+
+------------------------------CardDetailsById Json Sample
+Load the 
+
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"GET_CARD_DETAILS_BY_ID",,"userId":"55223366558466985"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"email":"tushal@softconnectltd.com","rSInfo":{"infoList":null,"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":{"IDNumber":"1354D254","Mobile":"57431244","Email":"jethrom@gmail.com","First_Name":"Jethro","Cards":{"Card":{"Record":null,"CARD_NO":null,"STATUS":null,"CardNum":"4558880000001134","Expiry":"31 Aug 2023","CardType":"KYC2","CardStatusCode":"1","CardStatusDescp":"Active CARD"}}},"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null}}
+
+
+
+------------------------------Select Pin Json Sample
+{"email":"tushal@softconnectltd.com","token":"#ujOyQhdLBEZhsKYCp25cyJwsTCBK!a0gFZMRZ0z4gCGVSmS8S","api":"PIN_SELECTION","cardNumber":"4558880000001134","newPin":"2222"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"email":"tushal@softconnectltd.com","rSInfo":{"infoList":null,"xmlns:type":null,"IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null}}
+
+------------------------------Change Pin Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"PIN_CHANGE","cardNumber":"4558880000001134","newPin":"12345","oldPin":"1234"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"email":"tushal@softconnectltd.com","rSInfo":{"infoList":["Do not honor transaction"],"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null}}
+
+
+
+------------------------------Latest Transaction History Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"LATEST_TRANS_HISTORY","cardNumber":"4558880000001134"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"otp":null,"rSInfo":{"infoList":null,"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":{"Transaction_Count":"4","Transaction":[{"Record":"1","Date_Time":"210820144644","TransacionType":"Currency Load","Trans_Type_Indicator":"Credit","Amount":"10.00","Balance":"25.00","Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"FINVENTURESMERC,SBM,EBENE,MU,MU","Authorization_Id_Resp":"083952"},{"Record":"2","Date_Time":"210820105804","TransacionType":"Currency Load","Trans_Type_Indicator":"Credit","Amount":"15.00","Balance":"15.00","Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"FINVENTURESMERC,SBM,EBENE,MU,MU","Authorization_Id_Resp":"069982"},{"Record":"3","Date_Time":"211202164632","TransacionType":"","Trans_Type_Indicator":"Debit","Amount":"4.00","Balance":"9986.00","Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"FINVENTURESMERC,SBM,EBENE,MU,MU","Authorization_Id_Resp":"903412"},{"Record":"4","Date_Time":"211202163113","TransacionType":"","Trans_Type_Indicator":"Debit","Amount":"10.00","Balance":"9990.00","Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"FINVENTURESMERC,SBM,EBENE,MU,MU","Authorization_Id_Resp":"840773"}]},"Last10Transactions":null,"AccountsBalance":null}}
+
+------------------------------Latest 10 Transaction History Json Sample
+{"email":"tushal@softconnectltd.com","token":"wQpA4L!xaB36AU85BYM8biykKhzDFWZJEZpMm9JiAh#gaT8htV","api":"LAST_10_TRANSACTIONS","cardNumber":"4558880000001134","userId":"55223366558466985"}
+
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"otp":null,"rSInfo":{"infoList":null,"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":{"Transaction":[{"Record":"1","Date_Time":"210820144644","TransacionType":"Currency Load","Trans_Type_Indicator":"Credit","Amount":"10.00","Balance":null,"Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"-","Authorization_Id_Resp":"083952"},{"Record":"2","Date_Time":"210820105804","TransacionType":"Currency Load","Trans_Type_Indicator":"Credit","Amount":"15.00","Balance":null,"Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"-","Authorization_Id_Resp":"069982"},{"Record":"3","Date_Time":"211202164632","TransacionType":"","Trans_Type_Indicator":"Debit","Amount":"4.00","Balance":null,"Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"-","Authorization_Id_Resp":"903412"},{"Record":"4","Date_Time":"211202163113","TransacionType":"","Trans_Type_Indicator":"Debit","Amount":"10.00","Balance":null,"Currency":"840","TerminalId":"FINVTERM","Card_Acceptor_Name_Loc":"-","Authorization_Id_Resp":"840773"}]},"AccountsBalance":null}}
+
+------------------------------BalanceInquiry Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"BALANCE_INQUIRY","cardNumber":"4558880000001134","currency":"USD"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"email":"tushal@softconnectltd.com","rSInfo":{"infoList":["Do not honor transaction"],"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null}}
+
+------------------------------Estatement Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"ESTATEMENT","cardNumber":"4558880000001134","dateFrom":"2021-06-01","dateTo":"2021-08-31","currency":"USD"}
+
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"email":"tushal@softconnectltd.com","rSInfo":{"infoList":["No results found."],"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null}}
+
+------------------------------GetAccountsBalance Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"GET_ACCOUNTS_BALANCE","cardNumber":"4558880000001134"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"otp":null,"rSInfo":{"infoList":null,"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":{"Account":{"Record":"1","CARD_NO":"4558880000001134","CARD_TYPE":"","ACCOUNT_NO":"4558880000109","BALANCE":"9986.00","CURRENCY_CODE":"840"}}}}
+
+------------------------------GetAllCardsAccountsBalance  Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"GET_ALL_CARDS_ACCOUNTS_BALANCE","idNumber":"1354D254"}
+
+{"token":null,"status":null,"expireIn":0,"moreDetails":null,"email":"tushal@softconnectltd.com","rSInfo":{"infoList":["No results found."],"xmlns:type":"xsd:string","IDNumber":null,"Mobile":null,"Email":null,"First_Name":null,"Last_Name":null,"Cards":null,"CardDetails":null,"CardsList":null,"TransactionHistory":null,"Last10Transactions":null,"AccountsBalance":null}}
+
+------------------------------GetUserDetails  Json Sample
+{"email":"tushal@softconnectltd.com","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"GET_USER_DETAILS","idNumber":"1354D254"}
+
+------------------------------P2PTransfer  Json Sample
+{"email":"tushal@softconnectltd.com","password":"superadmin","token":"pr4tFRUonCBxzA2f@C9TndbuCcJ605Jd0pDJetaqq5jQWekr57","api":"P2PTRANSFER","cardNumber":"","destinationCardNumber":"","amount":"","currency":"USD"}
+
+-----------------------------------------------------------------------
+Steps: 
+1. User Login
+2. OTP sent to user email address
+3. Error for wrong OTP
+4. Successfull login for correct user
+5. Persist to user login history table
+6. 
+

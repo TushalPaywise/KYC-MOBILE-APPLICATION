@@ -1,0 +1,12 @@
+npm install --save react-navigation
+expo install react-native-gesture-handler react-native-reanimated react-navigation-stack
+expo install react-native-safe-area-view react-native-safe-area-context
+expo install @react-native-community/masked-view
+npm i react-native-phone-number-input --save
+npm install react-native-masked-text --save
+npm install react-native-hide-show-password-input --save
+npm i react-native-vector-icons --save
+npm install @reduxjs/toolkit --save
+npm install react-redux --save
+expo install @react-native-async-storage/async-storage
+npm install--save react - otp - input --save
