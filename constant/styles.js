@@ -174,6 +174,7 @@ export const Fonts = {
 // #0a95ff light blue
 // #940346 Maroon
 // #9acd32 Apple Green
+// #2E1A47 PANTONE PURPLE
 export const Colors = {
   blackColor: "#000000",
   whiteColor: "#FFFFFF",
@@ -182,6 +183,7 @@ export const Colors = {
   visaCard: "#000066",
   masterCard: "#3A3B3C",
   red: "#FF0000",
+  splash: "#01459a",
 };
 
 export const Sizes = {
