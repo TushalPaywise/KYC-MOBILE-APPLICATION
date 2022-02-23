@@ -20,7 +20,8 @@
     "ios": {
       "bundleIdentifier": "com.primecard.net",
       "buildNumber" :"1.0.0",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {"NSFaceIDUsageDescription":"App needs to use Face ID / Touch ID to authenticate you"}
     },
     "android": {
       "package": "com.primecard.net",

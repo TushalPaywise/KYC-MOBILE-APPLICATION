@@ -20,7 +20,7 @@ import privacyPolicyScreen from "./screens/privacyPolicy/privacyPolicyScreen";
 import supportScreen from "./screens/support/supportScreen";
 import termsOfUseScreen from "./screens/termsOfUse/termsOfUseScreen";
 import transactionScreen from "./screens/transaction/transactionScreen";
-import transferSuccessfullScreen from "./screens/transferScccessfull/transferSuccessfullScreen";
+import transferSuccessfullScreen from "./screens/transferSuccessfull/transferSuccessfullScreen";
 import signinScreen from "./screens/auth/signinScreen";
 import registerScreen from "./screens/auth/registerScreen";
 import otpScreen from "./screens/auth/otpScreen";

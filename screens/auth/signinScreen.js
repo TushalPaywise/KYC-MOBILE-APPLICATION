@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Text,
   View,
@@ -10,6 +10,7 @@ import {
   TextInput,
   Alert,
   BackHandler,
+  Platform,
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constant/styles";
@@ -22,6 +23,7 @@ import {
 } from "../../redux/authentication";
 import { useDispatch, useSelector } from "react-redux";
 import Fetching from "../../component/Fetching";
+import * as LocalAuthentication from "expo-local-authentication";
 
 const SigninScreen = (props) => {
   const [emailAddress, setemailAddress] = useState("");
@@ -29,11 +31,7 @@ const SigninScreen = (props) => {
   const [password, setpassword] = useState("");
   const [passwordValid, setPasswordValid] = useState(true);
 
-  const resetFields = () => {
-    setemailAddress("");
-    setpassword("");
-  };
-
+  // https://spin.atomicobject.com/2021/04/05/react-native-keychain-mobile-application/
   const dispatch = useDispatch();
   const {
     isFetching,
@@ -58,13 +56,13 @@ const SigninScreen = (props) => {
     }
     if (isLoginSuccess && !registration) {
       dispatch(clearState());
-      resetFields();
+      setemailAddress("");
+      setpassword("");
       props.navigation.navigate("Otp");
     }
     if (isOtpSuccess) {
       dispatch(clearState());
       props.navigation.navigate("BottomTabBar");
-      resetFields();
     }
     if (isLoginSuccess && registration) {
       Alert.alert("Success", moreDetails, [
@@ -122,6 +120,41 @@ const SigninScreen = (props) => {
       return;
     }
   };
+  //BIOMETRIC
+  // wherever the useState is located
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  // Check if hardware supports biometrics
+  useEffect(() => {
+    (async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupported(compatible);
+    })();
+  });
+  //check the biometric records saved on the device
+  const handleBiometricAuth = async () => {
+    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
+    if (!savedBiometrics)
+      return Alert.alert(
+        "Biometric record not found",
+        "Please verify your identity with your password",
+        "OK",
+        () => fallBackToDefaultAuth()
+      );
+  };
+
+  const bioMetricHandler = useCallback(async () => {
+    // You can disable the LocalAuthenticationOptions
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Login with Biometrics",
+        cancelLabel: "Cancel",
+        disableDeviceFallback: true,
+      });
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
@@ -194,29 +227,60 @@ const SigninScreen = (props) => {
             password={password}
           />
           <CustomButton title="New User ?" style={styles.blueButtonStyle} />
-          {/* <View>
-            <Text
-              style={{
-                ...Fonts.blackColor14Medium,
-                textAlign: "center",
-                marginTop: Sizes.fixPadding,
-              }}
-            >
-              Or scan your thumb to continue
-            </Text>
-          </View>
-          <View>
-            <MaterialIcons
-              name="fingerprint"
-              size={80}
-              color={Colors.primaryColor}
-              style={{
-                alignSelf: "center",
-                marginTop: Sizes.fixPadding * 2.5,
-                marginBottom: Sizes.fixPadding * 2.0,
-              }}
-            />
-          </View> */}
+          {isBiometricSupported && (
+            <View>
+              <View>
+                {Platform.OS === "ios" ? (
+                  <View>
+                    <Text
+                      style={{
+                        ...Fonts.blackColor14Medium,
+                        textAlign: "center",
+                        marginTop: Sizes.fixPadding * 2,
+                      }}
+                    >
+                      Or use FaceID to continue
+                    </Text>
+
+                    <MaterialCommunityIcons
+                      name="face-recognition"
+                      size={80}
+                      color={Colors.primaryColor}
+                      style={{
+                        alignSelf: "center",
+                        marginTop: Sizes.fixPadding * 2.5,
+                        marginBottom: Sizes.fixPadding * 2.0,
+                      }}
+                      onPress={bioMetricHandler}
+                    />
+                  </View>
+                ) : (
+                  <View>
+                    <Text
+                      style={{
+                        ...Fonts.blackColor14Medium,
+                        textAlign: "center",
+                        marginTop: Sizes.fixPadding * 2,
+                      }}
+                    >
+                      Or scan your thumb to continue
+                    </Text>
+                    <MaterialIcons
+                      name="fingerprint"
+                      size={80}
+                      color={Colors.primaryColor}
+                      style={{
+                        alignSelf: "center",
+                        marginTop: Sizes.fixPadding * 2.5,
+                        marginBottom: Sizes.fixPadding * 2.0,
+                      }}
+                      onPress={bioMetricHandler}
+                    />
+                  </View>
+                )}
+              </View>
+            </View>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>

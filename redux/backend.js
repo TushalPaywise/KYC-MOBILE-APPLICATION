@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  API_URL,
   EMAIL_SUPPORT,
   FAILURE,
   RESET_PASSWORD,
 } from "../constant/ApiConstant";
+
+import { API_URL } from "@env";
 
 export const backendService = createAsyncThunk(
   "users/backendService",

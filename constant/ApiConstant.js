@@ -1,4 +1,4 @@
-export const API_URL = "http://192.168.100.113:8080";
+// export const API_URL = "http://192.168.100.113:8080";
 // export const API_URL = "https://test.upaywise.com";
 // status constants
 export const PINSELECTED = "PIN Selected";

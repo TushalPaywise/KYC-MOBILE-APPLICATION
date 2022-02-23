@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { API_URL, FAILURE, SUCCESS, TOKENVALID } from "../constant/ApiConstant";
+import { FAILURE, SUCCESS, TOKENVALID } from "../constant/ApiConstant";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "@env";
 
 //login controlller
 
@@ -9,6 +10,7 @@ export const loginUser = createAsyncThunk(
   "users/loginUser",
   async ({ email, password }) => {
     try {
+      console.log(API_URL);
       const response = await fetch(`${API_URL}/api/rest/login`, {
         method: "POST",
         headers: {
@@ -54,6 +56,7 @@ export const userRegistration = createAsyncThunk(
   }
 );
 //user authenticate with OTP
+
 export const userAuthenticate = createAsyncThunk(
   "users/userAuthenticate",
   async ({ email, token, otp }) => {
