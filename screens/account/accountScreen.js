@@ -132,8 +132,21 @@ const AccountScreen = (props) => {
           activeOpacity={0.9}
           onPress={() => props.navigation.navigate("ResetPassword")}
         >
+          <AccountSettingView
+            title="Enable Biometric"
+            width={width}
+            biometric={true}
+            emailAddress={props.emailAddress}
+            password={props.password}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => props.navigation.navigate("ResetPassword")}
+        >
           <AccountSettingView title="Change Password" width={width} />
         </TouchableOpacity>
+
         <Text style={styles.titleStyle}>ABOUT</Text>
         <TouchableOpacity
           activeOpacity={0.9}

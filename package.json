@@ -37,6 +37,7 @@
     "react-native-maps": "0.29.4",
     "react-native-masked-text": "^1.13.0",
     "react-native-material-dropdown": "^0.11.1",
+    "react-native-otp-field": "0.0.11",
     "react-native-paper": "^4.9.2",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "~2.3.1",
@@ -52,7 +53,8 @@
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
     "react-navigation-transitions": "^1.0.12",
-    "react-redux": "^7.2.6"
+    "react-redux": "^7.2.6",
+    "expo-secure-store": "~11.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

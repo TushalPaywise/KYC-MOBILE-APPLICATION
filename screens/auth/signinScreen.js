@@ -10,29 +10,74 @@ import {
   TextInput,
   Alert,
   BackHandler,
-  Platform,
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constant/styles";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import CustomButton from "../../component/CustomButton";
 import PasswordField from "../../component/PasswordField";
 import {
+  loginUser,
   authencationUseSelector,
   clearState,
 } from "../../redux/authentication";
 import { useDispatch, useSelector } from "react-redux";
 import Fetching from "../../component/Fetching";
 import * as LocalAuthentication from "expo-local-authentication";
+import * as SecureStore from "expo-secure-store";
+import { USERSESSION } from "../../constant/ApiConstant";
 
 const SigninScreen = (props) => {
   const [emailAddress, setemailAddress] = useState("");
   const [emailValid, setemailValid] = useState(true);
   const [password, setpassword] = useState("");
-  const [passwordValid, setPasswordValid] = useState(true);
 
-  // https://spin.atomicobject.com/2021/04/05/react-native-keychain-mobile-application/
   const dispatch = useDispatch();
+
+  const getBiometricData = async (key) => {
+    let userSession = await SecureStore.getItemAsync(key);
+    console.log("userSession", userSession);
+    if (userSession) {
+      console.log("Got User Details in local device");
+      const session = JSON.parse(userSession);
+      if (
+        session.emailAddress !== "undefined" &&
+        session.password !== "undefined"
+      ) {
+        console.log(session.emailAddress);
+        console.log(session.password);
+        setemailAddress(session.emailAddress);
+        setpassword(session.password);
+        dispatch(
+          loginUser({
+            email: session.emailAddress,
+            password: session.password,
+          })
+        );
+      } else {
+        alertBiometricNotAvailable();
+      }
+    } else {
+      alertBiometricNotAvailable();
+    }
+  };
+
+  const alertBiometricNotAvailable = () => {
+    Alert.alert("Error", "Biometric not set", [{ text: "Ok" }]);
+  };
+
+  const bioMetricHandler = useCallback(async () => {
+    // You can disable the LocalAuthenticationOptions
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: "Login with Biometrics",
+      cancelLabel: "Cancel",
+      disableDeviceFallback: true,
+    });
+    if (result.success) {
+      getBiometricData(USERSESSION);
+    }
+  }, []);
+
   const {
     isFetching,
     isLoginSuccess,
@@ -41,6 +86,11 @@ const SigninScreen = (props) => {
     moreDetails,
     registration,
   } = useSelector(authencationUseSelector);
+
+  const resetFields = () => {
+    setemailAddress("");
+    setpassword("");
+  };
 
   useEffect(() => {
     return () => {
@@ -56,13 +106,18 @@ const SigninScreen = (props) => {
     }
     if (isLoginSuccess && !registration) {
       dispatch(clearState());
-      setemailAddress("");
-      setpassword("");
       props.navigation.navigate("Otp");
     }
     if (isOtpSuccess) {
       dispatch(clearState());
-      props.navigation.navigate("BottomTabBar");
+      // saveBiometricData();
+      //show dialogue to enable biometric Feature
+      //then redirect to the Dashboard
+      props.navigation.navigate("BottomTabBar", {
+        emailAddress: emailAddress,
+        password: password,
+      });
+      resetFields();
     }
     if (isLoginSuccess && registration) {
       Alert.alert("Success", moreDetails, [
@@ -98,28 +153,21 @@ const SigninScreen = (props) => {
     return () => backHandler.remove();
   }, []);
 
-  const validateEmail = (props) => {
+  const validatePassword = (text) => {
+    setpassword(text);
+  };
+
+  const validateEmail = (text) => {
     setemailValid(true);
-    setemailAddress(props);
+    setemailAddress(text);
     //check email address
     const emailRegex =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (props.length === 0 || !emailRegex.test(props.toLowerCase())) {
+    if (!emailRegex.test(text.toLowerCase())) {
       setemailValid(false);
-
-      return;
     }
   };
 
-  const validatePassword = (text) => {
-    setPasswordValid(true);
-    setpassword(text);
-    //check the password length
-    if (text.length === 0) {
-      setPasswordValid(false);
-      return;
-    }
-  };
   //BIOMETRIC
   // wherever the useState is located
   const [isBiometricSupported, setIsBiometricSupported] = useState(false);
@@ -130,44 +178,20 @@ const SigninScreen = (props) => {
       setIsBiometricSupported(compatible);
     })();
   });
-  //check the biometric records saved on the device
-  const handleBiometricAuth = async () => {
-    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
-    if (!savedBiometrics)
-      return Alert.alert(
-        "Biometric record not found",
-        "Please verify your identity with your password",
-        "OK",
-        () => fallBackToDefaultAuth()
-      );
-  };
-
-  const bioMetricHandler = useCallback(async () => {
-    // You can disable the LocalAuthenticationOptions
-    try {
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: "Login with Biometrics",
-        cancelLabel: "Cancel",
-        disableDeviceFallback: true,
-      });
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.backgroundGrey }}>
       <StatusBar backgroundColor={Colors.primaryColor} />
       <View>
         {isFetching && <Fetching />}
 
         <ImageBackground
-          source={require("../../assets/images/banking.png")}
-          style={{ height: 206.0, width: "100%" }}
+          source={require("../../assets/mamoru/mamoruhoz.png")}
+          style={{ height: 206.0, color: Colors.whiteColor }}
+          resizeMode="contain"
         >
           <View style={styles.imageBackgroundShadowStyle}>
-            <Text style={{ ...Fonts.whiteColor35Bold }}>Primecard</Text>
+            {/* <Text style={{ ...Fonts.whiteColor35Bold }}>Mamoru</Text> */}
           </View>
         </ImageBackground>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -202,17 +226,6 @@ const SigninScreen = (props) => {
             />
           </View>
           <View>
-            {!passwordValid && (
-              <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>Password Invalid</Text>
-                <MaterialCommunityIcons
-                  name="form-textbox-password"
-                  size={18}
-                  color="red"
-                  style={styles.postionIconLeft}
-                />
-              </View>
-            )}
             <PasswordField
               placeholder="Password"
               value={password}
@@ -222,7 +235,14 @@ const SigninScreen = (props) => {
           </View>
           <CustomButton
             title="Login"
-            style={styles.blackButtonStyle}
+            style={{
+              backgroundColor: Colors.blackColor,
+              borderRadius: Sizes.fixPadding,
+              alignItems: "center",
+              justifyContent: "center",
+              height: 50.0,
+              marginHorizontal: Sizes.fixPadding * 2.0,
+            }}
             emailAddress={emailAddress}
             password={password}
           />
@@ -230,54 +250,28 @@ const SigninScreen = (props) => {
           {isBiometricSupported && (
             <View>
               <View>
-                {Platform.OS === "ios" ? (
-                  <View>
-                    <Text
-                      style={{
-                        ...Fonts.blackColor14Medium,
-                        textAlign: "center",
-                        marginTop: Sizes.fixPadding * 2,
-                      }}
-                    >
-                      Or use FaceID to continue
-                    </Text>
-
-                    <MaterialCommunityIcons
-                      name="face-recognition"
-                      size={80}
-                      color={Colors.primaryColor}
-                      style={{
-                        alignSelf: "center",
-                        marginTop: Sizes.fixPadding * 2.5,
-                        marginBottom: Sizes.fixPadding * 2.0,
-                      }}
-                      onPress={bioMetricHandler}
-                    />
-                  </View>
-                ) : (
-                  <View>
-                    <Text
-                      style={{
-                        ...Fonts.blackColor14Medium,
-                        textAlign: "center",
-                        marginTop: Sizes.fixPadding * 2,
-                      }}
-                    >
-                      Or scan your thumb to continue
-                    </Text>
-                    <MaterialIcons
-                      name="fingerprint"
-                      size={80}
-                      color={Colors.primaryColor}
-                      style={{
-                        alignSelf: "center",
-                        marginTop: Sizes.fixPadding * 2.5,
-                        marginBottom: Sizes.fixPadding * 2.0,
-                      }}
-                      onPress={bioMetricHandler}
-                    />
-                  </View>
-                )}
+                <View>
+                  <Text
+                    style={{
+                      ...Fonts.blackColor14Medium,
+                      textAlign: "center",
+                      marginTop: Sizes.fixPadding * 2,
+                    }}
+                  >
+                    Use Biometric Login
+                  </Text>
+                  <MaterialIcons
+                    name="fingerprint"
+                    size={80}
+                    color={Colors.primaryColor}
+                    style={{
+                      alignSelf: "center",
+                      marginTop: Sizes.fixPadding * 2.5,
+                      marginBottom: Sizes.fixPadding * 2.0,
+                    }}
+                    onPress={bioMetricHandler}
+                  />
+                </View>
               </View>
             </View>
           )}
@@ -315,14 +309,6 @@ const styles = StyleSheet.create({
     height: 50.0,
     marginHorizontal: Sizes.fixPadding * 2.0,
     marginTop: 3.0,
-  },
-  blackButtonStyle: {
-    backgroundColor: Colors.blackColor,
-    borderRadius: Sizes.fixPadding,
-    alignItems: "center",
-    justifyContent: "center",
-    height: 50.0,
-    marginHorizontal: Sizes.fixPadding * 2.0,
   },
   errorContainer: {
     flexDirection: "row-reverse",

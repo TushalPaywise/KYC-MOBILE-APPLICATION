@@ -12,8 +12,9 @@ import {
 import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constant/styles";
 import { MaterialIcons } from "@expo/vector-icons";
-import OtpView from "../../component/OtpView";
+// import OtpView from "../../component/OtpView";
 import CustomButton from "../../component/CustomButton";
+import OTPField from "react-native-otp-field";
 
 const { width } = Dimensions.get("screen");
 
@@ -29,7 +30,7 @@ const OtpScreen = (props) => {
           style={{ height: 206.0, width: "100%" }}
         >
           <View style={styles.imageBackgroundShadowStyle}>
-            <Text style={{ ...Fonts.whiteColor35Bold }}>Primecard</Text>
+            <Text style={{ ...Fonts.whiteColor35Bold }}>Authenticate</Text>
             <MaterialIcons
               name="arrow-back"
               size={24}
@@ -44,14 +45,24 @@ const OtpScreen = (props) => {
             style={{
               ...Fonts.blackColor14Medium,
               textAlign: "center",
-              marginVertical: Sizes.fixPadding * 2.0,
+              marginVertical: Sizes.fixPadding,
             }}
           >
             Enter OTP sent on your registered email address
           </Text>
 
-          <View style={styles.otpFieldsContainerStyle}>
-            <OtpView codeCount={6} onFinish={(value) => setOtpValue(value)} />
+          <View
+            style={{
+              alignItems: "center",
+            }}
+          >
+            <OTPField
+              length={6}
+              onChange={(value) => setOtpValue(value)}
+              value={otpValue}
+              containerStyle={styles.otpContainerStyle}
+              textFieldStyle={styles.otpFieldStyle}
+            />
           </View>
           <CustomButton
             title="Authenticate"
@@ -98,12 +109,23 @@ const styles = StyleSheet.create({
     height: 50.0,
     marginHorizontal: Sizes.fixPadding * 2.0,
   },
-  otpFieldsContainerStyle: {
+  otpContainerStyle: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: Sizes.fixPadding * 2.0,
-    justifyContent: "center",
     alignItems: "center",
+  },
+  otpFieldStyle: {
+    marginHorizontal: 10,
+    fontSize: 25,
+    textAlign: "center",
+    height: 50.0,
+    width: 50.0,
+    elevation: 3.0,
+    paddingLeft: Sizes.fixPadding - 2,
+    borderRadius: Sizes.fixPadding,
+    backgroundColor: Colors.whiteColor,
+    marginVertical: Sizes.fixPadding * 2,
+    alignItems: "center",
+    justifyContent: "center",
   },
   dialogContainerStyle: {
     borderRadius: Sizes.fixPadding,

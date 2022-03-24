@@ -6,12 +6,13 @@ import { API_URL } from "@env";
 //login controlller
 
 let timer;
+
 export const loginUser = createAsyncThunk(
   "users/loginUser",
   async ({ email, password }) => {
     try {
       console.log(API_URL);
-      const response = await fetch(`${API_URL}/api/rest/login`, {
+      const response = await fetch(`${API_URL}/kycApi/rest/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -33,7 +34,7 @@ export const userRegistration = createAsyncThunk(
   "users/userRegistration",
   async ({ email, password, mobileNumber, idNumber }) => {
     try {
-      const response = await fetch(`${API_URL}/api/rest/register`, {
+      const response = await fetch(`${API_URL}/kycApi/rest/register`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -61,7 +62,7 @@ export const userAuthenticate = createAsyncThunk(
   "users/userAuthenticate",
   async ({ email, token, otp }) => {
     try {
-      const response = await fetch(`${API_URL}/api/rest/authenticate`, {
+      const response = await fetch(`${API_URL}/kycApi/rest/authenticate`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -117,7 +118,7 @@ export const authenticationSlice = createSlice({
         state.isLoginSuccess = true;
         state.moreDetails = payload.moreDetails;
         const logoutTimer = parseInt(payload.expireIn) * 60000;
-        setLogoutTimer(logoutTimer);
+        // setLogoutTimer(logoutTimer); TODO
         storeUserLoginData(
           payload.token,
           payload.status,
@@ -173,6 +174,7 @@ export const authenticationSlice = createSlice({
         state.moreDetails = payload.moreDetails;
         state.isOtpSuccess = true;
         storeUserCardDetails(payload);
+        console.log("Register Action");
       } else {
         state.isError = true;
         state.isOtpSuccess = false;

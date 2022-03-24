@@ -15,6 +15,7 @@ import BankingScreen from "../screens/banking/bankingScreen";
 import BottomTab from "./BottomTab";
 
 const BottomTabBarScreen = (props) => {
+  // const { emailAddress, password } = route.params;
   const [state, setState] = useState(1);
   handleBackButton = () => {
     BackHandler.exitApp();
@@ -43,7 +44,10 @@ const BottomTabBarScreen = (props) => {
         ) : state == 2 ? (
           <NotificationScreen />
         ) : (
-          <AccountScreen />
+          <AccountScreen
+            emailAddress={props.navigation.getParam("emailAddress")}
+            password={props.navigation.getParam("password")}
+          />
         )}
         <View style={styles.bottomTabBarStyle}>
           <BottomTab
@@ -71,6 +75,8 @@ const BottomTabBarScreen = (props) => {
               setState(3);
             }}
             currentIndex={state}
+            emailAddress={props.navigation.getParam("emailAddress")}
+            password={props.navigation.getParam("password")}
           />
         </View>
       </View>

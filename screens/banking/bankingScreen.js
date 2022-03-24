@@ -344,7 +344,12 @@ const BankingScreen = (props) => {
         <View style={styles.transactionAndTransferMainContentStyle}>
           <TouchableOpacity
             style={styles.userCardContentStyle}
-            onPress={() => props.navigation.navigate("AccountScreen")}
+            onPress={() =>
+              props.navigation.navigate("AccountScreen", {
+                emailAddress: props.emailAddress,
+                password: props.password,
+              })
+            }
           >
             <Animatable.View animation="zoomIn" easing="ease-out">
               <View>

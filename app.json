@@ -4,12 +4,15 @@
     "slug": "Primecard-Mobile-App",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Primecard-Logo.png",
-    "platforms":["ios","android"],
+    "icon": "./assets/mamoru/mamoru_213196.png",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
-      "image": "./assets/images/Primecard-Logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/mamoru/mamoru_213196.png",
+      "resizeMode": "300*200",
+      "backgroundColor": "#FFFFFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,17 +22,20 @@
     ],
     "ios": {
       "bundleIdentifier": "com.primecard.net",
-      "buildNumber" :"1.0.0",
+      "buildNumber": "1.0.0",
       "supportsTablet": true,
-      "infoPlist": {"NSFaceIDUsageDescription":"App needs to use Face ID / Touch ID to authenticate you"}
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "App needs to use Face ID / Touch ID to authenticate you"
+      }
     },
     "android": {
       "package": "com.primecard.net",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/Primecard-Logo.png",
+        "foregroundImage": "./assets/mamoru/mamoru_213196.png",
         "backgroundColor": "#FFFFFF"
       }
-    }
+    },
+    "description": ""
   }
 }

@@ -16,3 +16,5 @@ export const PIN_CHANGE = "PIN_CHANGE";
 export const EMAIL_SUPPORT = "EMAIL_SUPPORT";
 export const RESET_PASSWORD = "RESET_PASSWORD";
 export const ESTATEMENT = "ESTATEMENT";
+
+export const USERSESSION = "userSession";

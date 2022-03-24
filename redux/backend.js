@@ -18,7 +18,7 @@ export const backendService = createAsyncThunk(
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/rest/${endpoint}`, {
+      const response = await fetch(`${API_URL}/kycApi/rest/${endpoint}`, {
         method: "POST",
         headers: {
           Accept: "application/json",

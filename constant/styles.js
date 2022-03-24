@@ -175,15 +175,17 @@ export const Fonts = {
 // #940346 Maroon
 // #9acd32 Apple Green
 // #2E1A47 PANTONE PURPLE
+// MAMORU #fa4856
 export const Colors = {
   blackColor: "#000000",
   whiteColor: "#FFFFFF",
   grayColor: "#808080",
-  primaryColor: "#01459a",
+  primaryColor: "#fa4856",
   visaCard: "#000066",
   masterCard: "#3A3B3C",
   red: "#FF0000",
-  splash: "#01459a",
+  splash: "##FFFFFF",
+  backgroundGrey: "#F2F4F6",
 };
 
 export const Sizes = {

@@ -10,7 +10,6 @@ import beneficiariesScreen from "./screens/beneficiaries/beneficiariesScreen";
 import benificiaryMoneyTransferScreen from "./screens/beneficiaryMoneyTransfer/benificiaryMoneyTransferScreen";
 import cardsScreen from "./screens/cards/cardsScreen";
 import depositeScreen from "./screens/deposite/depositeScreen";
-import editProfileScreen from "./screens/editProfile/editProfileScreen";
 import fundTransferScreen from "./screens/fundTransfer/fundTransferScreen";
 import loanStatementScreen from "./screens/loanStatement/loanStatementScreen";
 import newDepositScreen from "./screens/newDeposit/newDepositScreen";
@@ -53,7 +52,6 @@ const switchNavigator = createStackNavigator(
     Deposit: depositeScreen,
     NewDeposit: newDepositScreen,
     Cards: cardsScreen,
-    EditProfile: editProfileScreen,
     PrivacyPolicy: privacyPolicyScreen,
     TermsOfUse: termsOfUseScreen,
     Support: supportScreen,

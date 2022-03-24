@@ -10,16 +10,22 @@ const SplashScreen = (props) => {
   }, 5000);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.splash }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.whiteColor }}>
       <StatusBar backgroundColor={Colors.primaryColor} />
-      <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
         <Image
-          source={require("../assets/images/primecardWebsiteLogo.png")}
-          resizeMode="cover"
+          source={require("../assets/mamoru/mamoru_213196.png")}
+          resizeMode="contain"
         />
         <CircleFade
           size={60}
-          color={Colors.whiteColor}
+          color={Colors.primaryColor}
           style={{
             position: "absolute",
             bottom: 50.0,
