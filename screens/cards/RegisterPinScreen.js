@@ -17,7 +17,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { backendUseSelector, clearState } from "../../redux/backend";
 import Fetching from "../../component/Fetching";
 import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { PINSELECTED } from "../../constant/ApiConstant";
 import Notification from "../../component/Notification";
 
@@ -55,7 +55,9 @@ const RegisterPinScreen = (props) => {
   }, [isError, isSuccess]);
   useEffect(() => {
     const userCardDetails = async () => {
-      const userCardJsonDetails = await AsyncStorage.getItem("userCardDetails");
+      const userCardJsonDetails = await SecureStore.getItemAsync(
+        "userCardDetails"
+      );
       try {
         if (userCardJsonDetails !== null) {
           const transformedData = JSON.parse(userCardJsonDetails);
@@ -76,7 +78,7 @@ const RegisterPinScreen = (props) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <StatusBar backgroundColor={Colors.primaryColor} />
         {isFetching && <Fetching />}
         <View style={{ flex: 1 }}>

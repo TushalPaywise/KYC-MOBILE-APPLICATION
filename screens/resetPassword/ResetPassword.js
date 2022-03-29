@@ -68,7 +68,7 @@ const ResetPassword = (props) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <StatusBar backgroundColor={Colors.primaryColor} />
         <View style={{ flex: 1 }}>
           <View style={styles.headerContentStyle}>

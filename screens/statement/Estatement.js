@@ -18,12 +18,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { backendUseSelector, clearState } from "../../redux/backend";
 import Fetching from "../../component/Fetching";
 import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Notification from "../../component/Notification";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CurrencyList } from "../../constant/CurrencyList";
 import DepositTitle from "../../component/DepositTitle";
-
+import * as SecureStore from "expo-secure-store";
 const Estatement = (props) => {
   const height = Dimensions.get("window").height;
   function formatDate(date) {
@@ -70,7 +69,9 @@ const Estatement = (props) => {
   const [currency, setCurrency] = useState("");
   useEffect(() => {
     const userLoginData = async () => {
-      const userCardJsonDetails = await AsyncStorage.getItem("userCardDetails");
+      const userCardJsonDetails = await SecureStore.getItemAsync(
+        "userCardDetails"
+      );
       try {
         if (userCardJsonDetails !== null) {
           const userCardData = JSON.parse(userCardJsonDetails);

@@ -38,7 +38,7 @@ const RegisterScreen = (props) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
       <StatusBar backgroundColor={Colors.primaryColor} />
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <ImageBackground
           source={require("../../assets/images/registration.png")}
           style={{ height: 206.0, width: "100%" }}

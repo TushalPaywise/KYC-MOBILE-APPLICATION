@@ -12,7 +12,7 @@ import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constant/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import TransactionListView from "../../component/TransactionListView";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import {
   backendUseSelector,
   clearState,
@@ -28,7 +28,7 @@ const TransactionScreen = (props) => {
   const [noTransaction, setNoTransaction] = useState(false);
   useEffect(() => {
     const userCardDetails = async () => {
-      const userData = await AsyncStorage.getItem("userLoginData");
+      const userData = await SecureStore.getItemAsync("userLoginData");
       try {
         if (userData != null) {
           const transformedData = JSON.parse(userData);

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { FAILURE, SUCCESS, TOKENVALID } from "../constant/ApiConstant";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
+import * as SecureStore from "expo-secure-store";
 
 //login controlller
 
@@ -11,7 +11,6 @@ export const loginUser = createAsyncThunk(
   "users/loginUser",
   async ({ email, password }) => {
     try {
-      console.log(API_URL);
       const response = await fetch(`${API_URL}/kycApi/rest/login`, {
         method: "POST",
         headers: {
@@ -174,7 +173,6 @@ export const authenticationSlice = createSlice({
         state.moreDetails = payload.moreDetails;
         state.isOtpSuccess = true;
         storeUserCardDetails(payload);
-        console.log("Register Action");
       } else {
         state.isError = true;
         state.isOtpSuccess = false;
@@ -195,10 +193,10 @@ export const authenticationSlice = createSlice({
   },
 });
 
-export const logout = () => {
+export const logout = async () => {
   clearLogoutTimer();
-  AsyncStorage.removeItem("userLoginData");
-  AsyncStorage.removeItem("userCardDetails");
+  await SecureStore.deleteItemAsync("userLoginData");
+  await SecureStore.deleteItemAsync("userCardDetails");
 };
 
 const clearLogoutTimer = () => {
@@ -236,7 +234,7 @@ const storeUserLoginData = async (
       lastName: lastName,
       accountStatus: accountStatus,
     });
-    await AsyncStorage.setItem("userLoginData", jsonValue);
+    await SecureStore.setItemAsync("userLoginData", jsonValue);
   } catch (e) {
     // saving error
   }
@@ -244,7 +242,7 @@ const storeUserLoginData = async (
 
 const storeUserCardDetails = async (data) => {
   try {
-    await AsyncStorage.setItem("userCardDetails", JSON.stringify(data));
+    await SecureStore.setItemAsync("userCardDetails", JSON.stringify(data));
   } catch (e) {
     // saving error
   }

@@ -28,9 +28,9 @@ import * as SecureStore from "expo-secure-store";
 import { USERSESSION } from "../../constant/ApiConstant";
 
 const SigninScreen = (props) => {
-  const [emailAddress, setemailAddress] = useState("");
+  const [emailAddress, setemailAddress] = useState("tushal@softconnectltd.com");
   const [emailValid, setemailValid] = useState(true);
-  const [password, setpassword] = useState("");
+  const [password, setpassword] = useState("superadmin");
 
   const dispatch = useDispatch();
 

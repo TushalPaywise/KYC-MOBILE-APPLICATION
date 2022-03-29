@@ -14,12 +14,11 @@ import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constant/styles";
 import * as Animatable from "react-native-animatable";
 import { MaterialIcons, Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CurrencyList } from "../../constant/CurrencyList";
 import { TextInput } from "react-native-gesture-handler";
 const width = Dimensions.get("window").width;
 import Dialog from "react-native-dialog";
-
+import * as SecureStore from "expo-secure-store";
 const BankingScreen = (props) => {
   useEffect(() => {
     const backAction = () => {
@@ -48,11 +47,13 @@ const BankingScreen = (props) => {
   const [currency, setCurrency] = useState("");
   const [isLogout, setIsLogout] = useState(false);
   const [hideAmount, setHide] = useState(true);
-
+  const windowHeight = Dimensions.get("window").height;
   useEffect(() => {
     const userLoginData = async () => {
-      const userData = await AsyncStorage.getItem("userLoginData");
-      const userCardJsonDetails = await AsyncStorage.getItem("userCardDetails");
+      const userData = await SecureStore.getItemAsync("userLoginData");
+      const userCardJsonDetails = await SecureStore.getItemAsync(
+        "userCardDetails"
+      );
       if (userData !== null) {
         const transformedData = JSON.parse(userData);
         setUserId(transformedData.userId);
@@ -85,8 +86,14 @@ const BankingScreen = (props) => {
     userLoginData();
   }, []);
 
+  const logoutAction = async () => {
+    await SecureStore.deleteItemAsync("userLoginData");
+    await SecureStore.deleteItemAsync("userCardDetails");
+    props.navigation.navigate("Signin");
+  };
+
   return (
-    <View>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContentStyle}>
         <Text style={{ ...Fonts.blackColor18Bold }}>Dashboard</Text>
         <Ionicons
@@ -127,11 +134,7 @@ const BankingScreen = (props) => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => {
-                AsyncStorage.removeItem("userLoginData");
-                AsyncStorage.removeItem("userCardDetails");
-                props.navigation.navigate("Signin");
-              }}
+              onPress={logoutAction}
               style={styles.logOutButtonStyle}
             >
               <Text style={{ ...Fonts.whiteColor14Medium }}>Logout</Text>
@@ -139,253 +142,244 @@ const BankingScreen = (props) => {
           </View>
         </View>
       </Dialog.Container>
+      <View style={styles.accountInfoContentStyle}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: Sizes.fixPadding,
+          }}
+        >
+          <View style={styles.accountHolderContentStyle}>
+            <Image
+              source={require("../../assets/images/card/user.png")}
+              style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
+            />
+          </View>
+          <View style={{ marginLeft: Sizes.fixPadding }}>
+            <Text style={{ ...Fonts.grayColor12Regular }}>User ID</Text>
+            <Text style={{ ...Fonts.blackColor16Medium }}>{userId}</Text>
+          </View>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <TextInput style={{ ...Fonts.blackColor16Medium }} editable={false}>
+            Username |
+          </TextInput>
+          <TextInput
+            style={{ ...Fonts.blackColor16Medium, marginHorizontal: 3 }}
+            editable={false}
+          >
+            {userName.toUpperCase()}
+          </TextInput>
+        </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: Sizes.fixPadding }}
-      >
-        <View style={styles.accountInfoContentStyle}>
-          <View
+        <View style={{ flexDirection: "row" }}>
+          <TextInput style={{ ...Fonts.blackColor16Medium }} editable={false}>
+            Balance |
+          </TextInput>
+          <TextInput
+            secureTextEntry={hideAmount ? true : false}
+            style={{ ...Fonts.blackColor16Medium, marginHorizontal: 3 }}
+            editable={false}
+          >
+            {accountBalance} {currency.code}
+          </TextInput>
+          {!hideAmount && (
+            <AntDesign
+              name="eye"
+              size={20}
+              color={Colors.grayColor}
+              onPress={() => setHide(true)}
+              style={styles.postionIconLeft}
+            />
+          )}
+          {hideAmount && (
+            <Entypo
+              name="eye-with-line"
+              size={20}
+              color={Colors.grayColor}
+              onPress={() => setHide(false)}
+              style={styles.postionIconLeft}
+            />
+          )}
+        </View>
+
+        <TouchableOpacity
+          activeOpacity={0.9}
+          style={styles.changeAccountInfoContentStyle}
+        >
+          <Text
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: Sizes.fixPadding,
+              ...Fonts.primaryColor12Medium,
+              marginRight: Sizes.fixPadding - 5.0,
             }}
           >
-            <View style={styles.accountHolderContentStyle}>
+            Account {accountStatus}
+          </Text>
+          <View style={styles.changeAccountInfoIconStyle}>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={10}
+              color={Colors.primaryColor}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      {/* Transactions */}
+      <View style={styles.transactionAndTransferMainContentStyle}>
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          onPress={() => props.navigation.navigate("RegisterPinScreen")}
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
               <Image
-                source={require("../../assets/images/card/user.png")}
+                source={require("../../assets/images/card/key.png")}
                 style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
               />
+              <Text style={{ ...Fonts.blackColor16Bold }}>Register PIN?</Text>
             </View>
-            <View style={{ marginLeft: Sizes.fixPadding }}>
-              <Text style={{ ...Fonts.grayColor12Regular }}>User ID</Text>
-              <Text style={{ ...Fonts.blackColor16Medium }}>{userId}</Text>
+          </Animatable.View>
+        </TouchableOpacity>
+        {/* Change PIN */}
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          onPress={() => props.navigation.navigate("ChangePin")}
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/pin-number.png")}
+                style={{ height: 50, width: 50, alignSelf: "center" }}
+              />
+              <Text style={{ ...Fonts.blackColor16Bold }}>Change PIN</Text>
             </View>
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput style={{ ...Fonts.blackColor16Medium }} editable={false}>
-              Username |
-            </TextInput>
-            <TextInput
-              style={{ ...Fonts.blackColor16Medium, marginHorizontal: 3 }}
-              editable={false}
-            >
-              {userName.toUpperCase()}
-            </TextInput>
-          </View>
-
-          <View style={{ flexDirection: "row" }}>
-            <TextInput style={{ ...Fonts.blackColor16Medium }} editable={false}>
-              Balance |
-            </TextInput>
-            <TextInput
-              secureTextEntry={hideAmount ? true : false}
-              style={{ ...Fonts.blackColor16Medium, marginHorizontal: 3 }}
-              editable={false}
-            >
-              {accountBalance} {currency.code}
-            </TextInput>
-            {!hideAmount && (
-              <AntDesign
-                name="eye"
-                size={20}
-                color={Colors.grayColor}
-                onPress={() => setHide(true)}
-                style={styles.postionIconLeft}
+          </Animatable.View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.transactionAndTransferMainContentStyle}>
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          onPress={() => props.navigation.navigate("Transaction")}
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/money-transfer.png")}
+                style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
               />
-            )}
-            {hideAmount && (
-              <Entypo
-                name="eye-with-line"
-                size={20}
-                color={Colors.grayColor}
-                onPress={() => setHide(false)}
-                style={styles.postionIconLeft}
-              />
-            )}
-          </View>
-
-          <TouchableOpacity
-            activeOpacity={0.9}
-            style={styles.changeAccountInfoContentStyle}
-          >
-            <Text
-              style={{
-                ...Fonts.primaryColor12Medium,
-                marginRight: Sizes.fixPadding - 5.0,
-              }}
-            >
-              Account {accountStatus}
-            </Text>
-            <View style={styles.changeAccountInfoIconStyle}>
-              <MaterialIcons
-                name="arrow-forward-ios"
-                size={10}
-                color={Colors.primaryColor}
-              />
+              <Text
+                style={{
+                  ...Fonts.blackColor16Bold,
+                  alignSelf: "flex-start",
+                }}
+              >
+                Transactions
+              </Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        {/* Transactions */}
-        <View style={styles.transactionAndTransferMainContentStyle}>
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            onPress={() => props.navigation.navigate("RegisterPinScreen")}
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                {/* <MaterialIcons
-                  name="calendar-today"
-                  size={50}
-                  color={Colors.primaryColor}
-                  style={{ alignSelf: "center" }}
-                /> */}
-                <Image
-                  source={require("../../assets/images/card/key.png")}
-                  style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>Register PIN?</Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-          {/* Change PIN */}
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            onPress={() => props.navigation.navigate("ChangePin")}
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/pin-number.png")}
-                  style={{ height: 50, width: 50, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>Change PIN</Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.transactionAndTransferMainContentStyle}>
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            onPress={() => props.navigation.navigate("Transaction")}
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/money-transfer.png")}
-                  style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
-                />
-                <Text
-                  style={{
-                    ...Fonts.blackColor16Bold,
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  Transactions
-                </Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
+          </Animatable.View>
+        </TouchableOpacity>
 
-          {/* Statements */}
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            // Deposit
-            onPress={() => props.navigation.navigate("Estatement")}
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/bank-statement.png")}
-                  style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>Statement</Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.transactionAndTransferMainContentStyle}>
-          {/* Cards */}
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            onPress={() => {
-              props.navigation.navigate("Cards");
-            }}
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/debit-card.png")}
-                  style={{ height: 50, width: 50, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>View Cards</Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-          {/* My Accounts */}
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            // onPress={() =>
-            //   props.navigation.navigate("OneTimeTransferWithAccount")
-            // }
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/card-transfer.png")}
-                  style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>Card Transfer</Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.transactionAndTransferMainContentStyle}>
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            onPress={() =>
-              props.navigation.navigate("AccountScreen", {
-                emailAddress: props.emailAddress,
-                password: props.password,
-              })
-            }
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/settings.png")}
-                  style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>Settings</Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.userCardContentStyle}
-            onPress={() =>
-              props.navigation.navigate("Support", { username: userName })
-            }
-          >
-            <Animatable.View animation="zoomIn" easing="ease-out">
-              <View>
-                <Image
-                  source={require("../../assets/images/card/email.png")}
-                  style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
-                />
-                <Text style={{ ...Fonts.blackColor16Bold }}>
-                  Need Support ?
-                </Text>
-              </View>
-            </Animatable.View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
+        {/* Statements */}
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          // Deposit
+          onPress={() => props.navigation.navigate("Estatement")}
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/bank-statement.png")}
+                style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
+              />
+              <Text style={{ ...Fonts.blackColor16Bold }}>Statement</Text>
+            </View>
+          </Animatable.View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.transactionAndTransferMainContentStyle}>
+        {/* Cards */}
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          onPress={() => {
+            props.navigation.navigate("Cards");
+          }}
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/debit-card.png")}
+                style={{ height: 50, width: 50, alignSelf: "center" }}
+              />
+              <Text style={{ ...Fonts.blackColor16Bold }}>View Cards</Text>
+            </View>
+          </Animatable.View>
+        </TouchableOpacity>
+        {/* My Accounts */}
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          // onPress={() =>
+          //   props.navigation.navigate("OneTimeTransferWithAccount")
+          // }
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/card-transfer.png")}
+                style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
+              />
+              <Text style={{ ...Fonts.blackColor16Bold }}>Card Transfer</Text>
+            </View>
+          </Animatable.View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.transactionAndTransferMainContentStyle}>
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          onPress={() =>
+            props.navigation.navigate("AccountScreen", {
+              emailAddress: props.emailAddress,
+              password: props.password,
+            })
+          }
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/settings.png")}
+                style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
+              />
+              <Text style={{ ...Fonts.blackColor16Bold }}>Settings</Text>
+            </View>
+          </Animatable.View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.userCardContentStyle}
+          onPress={() =>
+            props.navigation.navigate("Support", { username: userName })
+          }
+        >
+          <Animatable.View animation="zoomIn" easing="ease-out">
+            <View>
+              <Image
+                source={require("../../assets/images/card/email.png")}
+                style={{ height: 50.0, width: 50.0, alignSelf: "center" }}
+              />
+              <Text style={{ ...Fonts.blackColor16Bold }}>Need Support ?</Text>
+            </View>
+          </Animatable.View>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingBottom: 60,
+  },
   headerContentStyle: {
     backgroundColor: Colors.whiteColor,
     height: 50.0,
@@ -400,30 +394,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: Sizes.fixPadding,
-    marginBottom: Sizes.fixPadding,
-    marginRight: Sizes.fixPadding,
+    marginTop: Sizes.fixPadding - 1,
+    marginBottom: Sizes.fixPadding - 1,
+    marginRight: Sizes.fixPadding - 1,
   },
   userCardContentStyle: {
     marginTop: Sizes.fixPadding * 2.0,
-    height: "100%",
     width: "42%",
-    paddingVertical: Sizes.fixPadding,
+    paddingVertical: Sizes.fixPadding - 1,
     backgroundColor: Colors.whiteColor,
     borderRadius: Sizes.fixPadding,
     elevation: 6.0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: Sizes.fixPadding * 2.0,
+    padding: Sizes.fixPadding,
     marginHorizontal: Sizes.fixPadding * 2.0,
     shadowColor: Colors.primaryColor,
   },
   accountInfoContentStyle: {
     backgroundColor: Colors.whiteColor,
     marginHorizontal: Sizes.fixPadding,
-    marginVertical: Sizes.fixPadding,
-    padding: Sizes.fixPadding,
+    marginVertical: Sizes.fixPadding - 2,
+    padding: Sizes.fixPadding - 2,
     // elevation: 4.0,
     // borderRadius: 15,
   },

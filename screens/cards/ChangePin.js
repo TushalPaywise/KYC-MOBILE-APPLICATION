@@ -18,7 +18,7 @@ import { backendUseSelector, clearState } from "../../redux/backend";
 import Fetching from "../../component/Fetching";
 import { useDispatch, useSelector } from "react-redux";
 import Notification from "../../component/Notification";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { PIN_SELECTION } from "../../constant/ApiConstant";
 
 const ChangePin = (props) => {
@@ -53,7 +53,9 @@ const ChangePin = (props) => {
 
   useEffect(() => {
     const userCardDetails = async () => {
-      const userCardJsonDetails = await AsyncStorage.getItem("userCardDetails");
+      const userCardJsonDetails = await SecureStore.getItemAsync(
+        "userCardDetails"
+      );
       try {
         if (userCardJsonDetails !== null) {
           const transformedData = JSON.parse(userCardJsonDetails);
@@ -74,7 +76,7 @@ const ChangePin = (props) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <StatusBar backgroundColor={Colors.primaryColor} />
         {isFetching && <Fetching />}
         <View style={{ flex: 1 }}>

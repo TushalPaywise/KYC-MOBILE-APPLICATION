@@ -15,7 +15,7 @@ import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constant/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import Dialog from "react-native-dialog";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import AccountSettingView from "../../component/AccountSettingView";
 
 const { width } = Dimensions.get("screen");
@@ -43,7 +43,7 @@ const AccountScreen = (props) => {
   const [email, setEmail] = useState("");
   useEffect(() => {
     const userLoginData = async () => {
-      const userData = await AsyncStorage.getItem("userLoginData");
+      const userData = await SecureStore.getItemAsync("userLoginData");
       try {
         if (userData !== null) {
           const transformedData = JSON.parse(userData);
@@ -82,6 +82,12 @@ const AccountScreen = (props) => {
 
     return () => backHandler.remove();
   }, []);
+
+  const logoutAction = async () => {
+    await SecureStore.deleteItemAsync("userLoginData");
+    await SecureStore.deleteItemAsync("userCardDetails");
+    props.navigation.navigate("Signin");
+  };
   return (
     <View style={{ flex: 1, backgroundColor: "#F2F4F6" }}>
       <View style={styles.headerContentStyle}>
@@ -209,11 +215,7 @@ const AccountScreen = (props) => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => {
-                AsyncStorage.removeItem("userLoginData");
-                AsyncStorage.removeItem("userCardDetails");
-                props.navigation.navigate("Signin");
-              }}
+              onPress={logoutAction}
               style={styles.logOutButtonStyle}
             >
               <Text style={{ ...Fonts.whiteColor14Medium }}>Logout</Text>

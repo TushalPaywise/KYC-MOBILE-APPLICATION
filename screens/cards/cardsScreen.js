@@ -16,7 +16,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Slider } from "react-native-elements";
 import Dialog from "react-native-dialog";
 import TransactionListView from "../../component/TransactionListView";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   backendUseSelector,
   clearState,
@@ -27,7 +26,7 @@ import { LAST_10_TRANSACTIONS } from "../../constant/ApiConstant";
 import CardView from "../../component/CardView";
 import Fetching from "../../component/Fetching";
 import Notification from "../../component/Notification";
-
+import * as SecureStore from "expo-secure-store";
 const { width } = Dimensions.get("screen");
 
 const CardsScreen = (props) => {
@@ -42,8 +41,10 @@ const CardsScreen = (props) => {
 
   useEffect(() => {
     const userCardDetails = async () => {
-      const userCardJsonDetails = await AsyncStorage.getItem("userCardDetails");
-      const userData = await AsyncStorage.getItem("userLoginData");
+      const userCardJsonDetails = await SecureStore.getItemAsync(
+        "userCardDetails"
+      );
+      const userData = await SecureStore.getItemAsync("userLoginData");
       try {
         if (userCardJsonDetails !== null) {
           const transformedData = JSON.parse(userCardJsonDetails);

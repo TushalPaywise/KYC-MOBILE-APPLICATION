@@ -7,8 +7,7 @@ import {
   userRegistration,
 } from "../redux/authentication";
 import { withNavigation } from "react-navigation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
 import { backendService } from "../redux/backend.js";
 import {
@@ -27,7 +26,7 @@ const CustomButton = (props) => {
   const [userDataJson, setUserDataJson] = useState("");
   useEffect(() => {
     const userLoginData = async () => {
-      const userData = await AsyncStorage.getItem("userLoginData");
+      const userData = await SecureStore.getItemAsync("userLoginData");
       try {
         if (userData !== null) {
           const transformedData = JSON.parse(userData);
